@@ -54,7 +54,7 @@ class qbc_ddbcw:
         assert self._X_train is not None and self._y_train is not None,"must fit before predict!"
         assert X_predict.shape[1] == self._X_train.shape[1],"the feature number of X_predict must be equal to X_train"
         
-        scores_sort = self._predict(X_predict)
+        scores_sort = self.__predict(X_predict)
         scores_sort = np.array(scores_sort)
         scores_sorted = np.argsort(scores_sort)
         
@@ -62,7 +62,7 @@ class qbc_ddbcw:
         
         return X_output
                                     
-    def _scores_func(self,proba):
+    def __scores_func(self,proba):
         scores_sort = []
         #proba形如[[0.1,0.9],[0.4,0.6],[0.7,0.3]]
         for sc in proba:
@@ -76,15 +76,15 @@ class qbc_ddbcw:
             scores_sort.append(col)
         return scores_sort
     
-    def _predict(self,x_choice):
+    def __predict(self,x_choice):
                                 
         proba1 = self.gb_clf1.predict_proba(x_choice)
         proba2 = self.gb_clf2.predict_proba(x_choice)
         proba3 = self.gb_clf3.predict_proba(x_choice)
         
-        scores1_sort = self._scores_func(proba1)  
-        scores2_sort = self._scores_func(proba2)
-        scores3_sort = self._scores_func(proba3)
+        scores1_sort = self.__scores_func(proba1)  
+        scores2_sort = self.__scores_func(proba2)
+        scores3_sort = self.__scores_func(proba3)
         
         x_all = pd.concat([self._X_train,x_choice])                                 
         neigh = NearestNeighbors()
