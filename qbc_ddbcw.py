@@ -102,13 +102,13 @@ class qbc_ddbcw:
         scores_sort = []
         if distribution >= self.balance_scale:
             for i in range(len(scores1_sort)):
-                diversity = 1-(pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:2]],metric="cosine").sum())
+                diversity = pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:2]],metric="cosine").sum()
                 density = (10-pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:]],metric="cosine").sum())/10
                 col = max(scores1_sort[i]*score_weight1,scores2_sort[i]*score_weight2,scores3_sort[i]*score_weight3)*diversity*density
                 scores_sort.append(col)
         else:
             for i in range(len(scores1_sort)):
-                diversity = 1-(pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:2]],metric="cosine").sum())
+                diversity = pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:2]],metric="cosine").sum()
                 density = (10-pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:]],metric="cosine").sum())/10
                 if (proba1[i][0]+proba2[i][0]+proba3[i][0])/3 < 0.5:
                     col = max(scores1_sort[i]*score_weight1,scores2_sort[i]*score_weight2,scores3_sort[i]*score_weight3)*diversity*density
