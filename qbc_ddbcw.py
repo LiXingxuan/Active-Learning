@@ -8,7 +8,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 class qbc_ddbcw:
     
-    def __init__(self,balance_scale=0.35,bigger_par=0.6,distance_scope=11,each_size=30):
+    def __init__(self,balance_scale=0.35,bigger_par=2,distance_scope=11,each_size=30):
         assert balance_scale>=0 and balance_scale<=1,"balance_scale must in [0,1]"
         assert bigger_par>=0,"bigger_par must be positive"
         assert distance_scope>=2,"distance_scope must greater than 2"
@@ -104,16 +104,16 @@ class qbc_ddbcw:
             for i in range(len(scores1_sort)):
                 diversity = pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:2]],metric="cosine").sum()
                 density = (10-pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:]],metric="cosine").sum())/10
-                col = max(scores1_sort[i]*score_weight1,scores2_sort[i]*score_weight2,scores3_sort[i]*score_weight3)*diversity*density
+                col = max(scores1_sort[i]*score_weight1,scores2_sort[i]*score_weight2,scores3_sort[i]*score_weight3)+100*diversity+100*density
                 scores_sort.append(col)
         else:
             for i in range(len(scores1_sort)):
                 diversity = pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:2]],metric="cosine").sum()
                 density = (10-pairwise_distances([x_choice.iloc[i]],x_all.iloc[distance_number[i][1:]],metric="cosine").sum())/10
                 if (proba1[i][0]+proba2[i][0]+proba3[i][0])/3 < 0.5:
-                    col = max(scores1_sort[i]*score_weight1,scores2_sort[i]*score_weight2,scores3_sort[i]*score_weight3)*diversity*density
+                    col = (max(scores1_sort[i]*score_weight1,scores2_sort[i]*score_weight2,scores3_sort[i]*score_weight3)+100*diversity+100*density)*self.bigger_par
                 else:
-                    col = max(scores1_sort[i]*score_weight1,scores2_sort[i]*score_weight2,scores3_sort[i]*score_weight3)*diversity*density*self.bigger_par
+                    col = max(scores1_sort[i]*score_weight1,scores2_sort[i]*score_weight2,scores3_sort[i]*score_weight3)+100*diversity+100*density
                 scores_sort.append(col)
         return scores_sort
     
